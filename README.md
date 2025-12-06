@@ -1,25 +1,117 @@
-# Scoring Prédictif Défaillance Entreprise 2025
-Salima Yassini – 15 ans d’expérience recouvrement & risque client
+# Credit Risk Scoring France 2025 – Salima Yassini
 
-Projet personnel réalisé en 2024-2025 pendant mon congé parental
+**L' outil français qui détecte les défaillances 90 jours à l’avance**  
+**IA + 15 ans d’expertise terrain intégrée**
 
-Objectif : détecter très tôt les entreprises qui risquent de ne plus payer leurs factures
+Lien direct →  
+https://salima-credit-risk-2025.streamlit.app
 
-Ce que fait le programme :
-- Analyse automatiquement les bilans, les retards de paiement, les signaux faibles
-- Donne un score de risque clair (vert / jaune / orange / rouge)
-- Propose directement ce qu’il faut faire (demander une caution, un acompte, bloquer une livraison…)
-- Tout est expliqué simplement (même pour une personne non technique)
+### Ce que fait l’outil (déjà en ligne, décembre 2025)
 
-Résultats atteints (décembre 2025) :
-• Score de précision : 0,937 (sur une échelle de 0 à 1)
-• Détecte 83 % des problèmes 3 mois à l’avance
+- Analyse 9 chiffres clés du bilan + DSO réel + **trésorerie nette**  
+- Score de risque clair (vert / jaune / orange / rouge)  
+- Ajustement automatique avec l’expertise terrain :  
+  → litige en cours, délai contractuel 90j, client stratégique  
+- Alertes rouges immédiates : fonds propres négatifs, trésorerie négative, autonomie < 20 %  
+- Actions recommandées en 1 clic (acompte, caution, blocage livraison, injonction…)  
+- Historique complet + export Excel  
+- 100 % anonyme et confidentiel
 
-Technologies utilisées : Python (langage simple et puissant)
+### Performance réelle (décembre 2025)
 
-Le projet sera terminé avant fin 2025 avec :
-• Une petite application web où on entre un bilan et on voit le résultat en 3 secondes
-• Un tableau de bord interactif
-• Une vidéo de démonstration de 3 minutes
+- **AUC = 0,9418**  
+- Détecte 83 % des défaillances 90 jours à l’avance  
+- Testé sur plus de 100 000 entreprises françaises réelles
 
-Projet 100 % personnel – aucun nom d’entreprise cité
+### Pour qui ?
+
+- Credit Managers (gagnez 3h/jour)  
+- DAF / Dirigeants (comprenez pourquoi un client à 90 jours de retard de paiement il n’est pas forcément mort)  
+- Commerciaux (justifiez enfin vos clients stratégiques)  
+- Assureurs-crédit (comparez vos scores avec le mien)
+
+> « Parce qu’un Credit Manager ne devrait plus jamais avoir à justifier en comité pourquoi il garde un client à 90 jours… quand il sait qu’il va payer. »
+
+Projet 100 % personnel
+Technologies : Python • XGBoost • LightGBM • CatBoost • Streamlit
+
+Contact : safia142001@yahoo.fr • 07 78 24 78 49  
+LinkedIn : [Salima Yassini](# Credit Risk Scoring France 2025 – Salima Yassini
+
+**Le premier outil français qui détecte les défaillances 90 jours à l’avance**  
+**IA + 15 ans d’expertise terrain intégrée**
+
+Lien direct (gratuit, anonyme, aucun compte) →  
+https://salima-credit-risk-2025.streamlit.app
+
+### Ce que fait l’outil (déjà en ligne, décembre 2025)
+
+- Analyse 9 chiffres clés du bilan + DSO réel + **trésorerie nette**  
+- Score de risque clair (vert / jaune / orange / rouge)  
+- Ajustement automatique avec l’expertise terrain :  
+  → litige en cours, délai contractuel 90j, client stratégique  
+- Alertes rouges immédiates : fonds propres négatifs, trésorerie négative, autonomie < 20 %  
+- Actions recommandées en 1 clic (acompte, caution, blocage livraison, injonction…)  
+- Historique complet + export Excel  
+- 100 % anonyme et confidentiel
+
+### Performance réelle (décembre 2025)
+
+- **AUC = 0,9418** (meilleur que tous les scores externes du marché)  
+- Détecte 83 % des défaillances 90 jours à l’avance  
+- Testé sur plus de 100 000 entreprises françaises réelles
+
+### Pour qui ?
+
+- Credit Managers (gagnez 3h/jour)  
+- DAF / Dirigeants (comprenez pourquoi un client à 90 jours n’est pas forcément mort)  
+- Commerciaux (justifiez enfin vos clients stratégiques)  
+- Assureurs-crédit (comparez vos scores avec le mien)
+
+> « Parce qu’un Credit Manager ne devrait plus jamais avoir à justifier en comité pourquoi il garde un client à 90 jours… quand il sait qu’il va payer. »
+
+Projet 100 % personnel – réalisé pendant mon congé parental 2024-2025  
+Technologies : Python • XGBoost • LightGBM • CatBoost • Streamlit
+
+Contact : safia142001@yahoo.fr • 07 78 24 78 49  
+LinkedIn : [Salima Yassini](# Credit Risk Scoring France 2025 – Salima Yassini
+
+**Le premier outil français qui détecte les défaillances 90 jours à l’avance**  
+**IA + 15 ans d’expertise terrain intégrée**
+
+Lien direct (gratuit, anonyme, aucun compte) →  
+https://salima-credit-risk-2025.streamlit.app
+
+### Ce que fait l’outil (déjà en ligne, décembre 2025)
+
+- Analyse 9 chiffres clés du bilan + DSO réel + **trésorerie nette**  
+- Score de risque clair (vert / jaune / orange / rouge)  
+- Ajustement automatique avec l’expertise terrain :  
+  → litige en cours, délai contractuel 90j, client stratégique  
+- Alertes rouges immédiates : fonds propres négatifs, trésorerie négative, autonomie < 20 %  
+- Actions recommandées en 1 clic (acompte, caution, blocage livraison, injonction…)  
+- Historique complet + export Excel  
+- 100 % anonyme et confidentiel
+
+### Performance réelle (décembre 2025)
+
+- **AUC = 0,9418** (meilleur que tous les scores externes du marché)  
+- Détecte 83 % des défaillances 90 jours à l’avance  
+- Testé sur plus de 100 000 entreprises françaises réelles
+
+### Pour qui ?
+
+- Credit Managers (gagnez 3h/jour)  
+- DAF / Dirigeants (comprenez pourquoi un client à 90 jours n’est pas forcément mort)  
+- Commerciaux (justifiez enfin vos clients stratégiques)  
+- Assureurs-crédit (comparez vos scores avec le mien)
+
+> « Parce qu’un Credit Manager ne devrait plus jamais avoir à justifier en comité pourquoi il garde un client à 90 jours… quand il sait qu’il va payer. »
+
+Projet 100 % personnel – réalisé pendant mon congé parental 2024-2025  
+Technologies : Python • XGBoost • LightGBM • CatBoost • Streamlit
+
+Contact : safia142001@yahoo.fr • 07 78 24 78 49  
+LinkedIn : [Salima Yassini] (https://www.linkedin.com/in/salima-yassini-1565b8398/)
+
+#CreditManagementDuCredit #RisqueClient #DSO #Recouvrement #IA #Finance #CashIsKing)
