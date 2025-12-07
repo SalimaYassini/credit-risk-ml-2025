@@ -124,5 +124,5 @@ st.markdown("---")
 st.markdown("""
 **Outil créé en décembre 2025 par Salima Yassini**  
 **Contact :** safia142001@yahoo.fr • 07 78 24 78 49  
-**LinkedIn :** [Salima Yassini](https://www.linkedin.com/in/salima-yassini-credit-manager/)
+**LinkedIn :** [Salima Yassini](https://www.linkedin.com/in/salima-yassini-1565b8398/)
 """)
