@@ -1,5 +1,3 @@
-# pages/1_ℹ️_Aide_&_Explications.py
-
 import streamlit as st
 
 st.set_page_config(page_title="Aide & Explications – Salima Yassini 2025", layout="wide")
@@ -33,18 +31,18 @@ with col2:
     """)
 
 # ===================================================================
-# 2. LES 9 CHIFFRES CLÉS (tout est dans la liasse fiscale)
+# 2. LES 9 CHIFFRES CLÉS
 # ===================================================================
 st.markdown("### 2. Les 9 chiffres clés à saisir (même un novice y arrive en 1 minute)")
 st.info("""
-1. Chiffre d’affaires HT 2024  
-2. Résultat net 2024  
-3. Total bilan  
-4. Fonds propres  
-5. Trésorerie nette  
-6. Emprunts & dettes financières  
-7. Délai accordé + retard moyen → DSO réel  
-8. Score externe (Ellisphere/Altares/Coface, Infolégale...)  
+1. Chiffre d’affaires HT 2024
+2. Résultat net 2024
+3. Total bilan
+4. Fonds propres
+5. Trésorerie nette
+6. Emprunts & dettes financières
+7. Délai accordé + retard moyen → DSO réel
+8. Score externe (Ellisphere/Altares/Coface, Infolégale...)
 9. Région & Secteur
 """)
 
@@ -66,7 +64,7 @@ st.error("""
 # ===================================================================
 st.markdown("### 4. Comment l’utiliser (même si vous n’êtes pas Credit Manager)")
 st.info("""
-1. Remplissez les 9 chiffres clés  
+1. Remplissez les 9 chiffres clés
 2. Cochez la réalité terrain en 10 secondes :
    - Litige bloquant ? → cochez
    - Délai 90 jours écrit au contrat ? → cochez
@@ -85,23 +83,23 @@ st.info("""
 st.markdown("### 5. Cet outil est fait pour vous si vous êtes…")
 st.markdown("""
 - **Credit Manager** → gagnez 3 h par jour sur vos analyses
+""")
+
 st.markdown("""
 **DAF / Dirigeant → comprenez enfin pourquoi un client à 90 jours n’est pas forcément mort**
-
 Un client à 90 jours de retard = alerte rouge chez 99 % des dirigeants.
-
 Mais en réalité (15 ans d’expérience terrain) :
 - 70 % des retards > 90 jours sont **administratifs** (litige facture, avoir en attente, bon de réception non signé…)
 - Le client est souvent **stratégique** (gros CA, historique, relation DG)
 - Il finit **quasiment toujours** par payer (souvent à 120-150 jours, mais il paye)
-
 Mon IA intègre ça :
 - Un client à 115 jours + litige en cours + client stratégique → **risque réel = 4-8 %** (pas 75 % comme les scores externes)
 - Vous voyez enfin **pourquoi le Credit Manager dit « on le garde »** en comité crédit
 - Et vous gardez **2 à 5 M€ de CA supplémentaire par an** sans prendre de risque réel
-
 **C’est exactement pour ça que cet outil existe.**
 """)
+
+st.markdown("""
 - **Commercial** → justifiez enfin à votre boss pourquoi vous gardez ce gros client qui paye lentement
 - **Assureur-crédit** → comparez votre score avec le mien (vous allez être surpris)
 """)
