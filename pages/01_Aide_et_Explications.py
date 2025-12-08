@@ -86,16 +86,16 @@ st.markdown("""
 """)
 
 st.markdown("""
-**DAF / Dirigeant → comprenez enfin pourquoi un client à 90 jours n’est pas forcément mort**
+- **DAF / Dirigeant → comprenez enfin pourquoi un client à 90 jours n’est pas forcément mort**
 Un client à 90 jours de retard = alerte rouge chez 99 % des dirigeants.
 Mais en réalité (15 ans d’expérience terrain) :
-- 70 % des retards > 90 jours sont **administratifs** (litige facture, avoir en attente, bon de réception non signé…)
-- Le client est souvent **stratégique** (gros CA, historique, relation DG)
-- Il finit **quasiment toujours** par payer (souvent à 120-150 jours, mais il paye)
+70 % des retards > 90 jours sont **administratifs** (litige facture, avoir en attente, bon de réception non signé…)
+Le client est souvent **stratégique** (gros CA, historique, relation DG)
+Il finit **quasiment toujours** par payer (souvent à 120-150 jours, mais il paye)
 Mon IA intègre ça :
-- Un client à 115 jours + litige en cours + client stratégique → **risque réel = 4-8 %** (pas 75 % comme les scores externes)
-- Vous voyez enfin **pourquoi le Credit Manager dit « on le garde »** en comité crédit
-- Et vous gardez **2 à 5 M€ de CA supplémentaire par an** sans prendre de risque réel
+Un client à 115 jours + litige en cours + client stratégique → **risque réel = 4-8 %** (pas 75 % comme les scores externes)
+Vous voyez enfin **pourquoi le Credit Manager dit « on le garde »** en comité crédit
+Et vous gardez **2 à 5 M€ de CA supplémentaire par an** sans prendre de risque réel
 **C’est exactement pour ça que cet outil existe.**
 """)
 
