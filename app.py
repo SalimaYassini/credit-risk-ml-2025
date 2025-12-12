@@ -9,21 +9,33 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # ===================================================================
-# INITIALISATION
+# INITIALISATION SESSION STATE – TOUT ÇA EST OBLIGATOIRE
 # ===================================================================
 if "historique" not in st.session_state:
     st.session_state.historique = []
+
 if "save_now" not in st.session_state:
     st.session_state.save_now = False
+
 if "current_client" not in st.session_state:
     st.session_state.current_client = ""
 if "current_siren" not in st.session_state:
     st.session_state.current_siren = ""
+
 if "last_prob" not in st.session_state:
     st.session_state.last_prob = 0.0
 if "last_score_ajuste" not in st.session_state:
     st.session_state.last_score_ajuste = 0.0
-
+if "last_autonomie" not in st.session_state:
+    st.session_state.last_autonomie = 0.0
+if "last_dso" not in st.session_state:
+    st.session_state.last_dso = 0
+if "last_score" not in st.session_state:
+    st.session_state.last_score = 0.0
+if "last_region" not in st.session_state:
+    st.session_state.last_region = ""
+if "last_secteur" not in st.session_state:
+    st.session_state.last_secteur = ""
 # ===================================================================
 # CONFIGURATION GÉNÉRALE
 # ===================================================================
@@ -72,7 +84,7 @@ page = st.sidebar.radio("Navigation", ["Simulation client", "Carte de France", "
 if page == "Simulation client":
 
     st.markdown("## Scoring prédictif de défaut 90 jours avant")
-    st.info("Saisissez les 9 chiffres clés – tout est dans le bilan ou liasse fiscale et balance âgée")
+    st.info("Saisissez les 15 chiffres clés – tout est dans le bilan ou liasse fiscale et balance âgée")
 
     col1, col2 = st.columns(2)
 
@@ -188,6 +200,45 @@ if page == "Simulation client":
 
         forme = st.selectbox("Forme juridique", ["SAS","SARL","SA","EURL","Auto-entrepreneur","Autre"], index=0, key="forme")
 
+        # ==================================================================
+# 10. Délai de paiement accordé sur facture (jours) → clé de la formule
+# 11. Garantie ou assurance-crédit (%)
+# 12. Encours actuel (€)
+# 13. Limite de crédit actuelle (€)
+# 14. Nombre de relances déjà envoyées
+# 15. Type de client
+# ==================================================================
+
+st.markdown("### 10-15 — Paramètres de paiement & ajustements terrain")
+
+col1, col2 = st.columns(2)
+with col1:
+    delai_accorde_jours = st.number_input(
+        "10. Délai de paiement accordé sur facture (jours)",
+        min_value=0, max_value=180, value=45, step=5,
+        help="30, 45, 60, 90, 120… C’est cette valeur qui pilote directement la limite crédit"
+    )
+with col2:
+    garantie_pct = st.slider(
+        "11. Garantie ou assurance-crédit (%)",
+        0, 100, 0, 
+        help="0 = aucun couverture – 100 = totalement couvert par assurance ou caution"
+    )
+
+col3, col4, col5 = st.columns(3)
+with col3:
+    encours = st.number_input("12. Encours actuel (€)", min_value=0.0, value=0.0, format="%.0f")
+with col4:
+    limite_credit_actuelle = st.number_input("13. Limite de crédit actuelle (€)", min_value=0.0, value=0.0, format="%.0f")
+with col5:
+    nb_relances = st.number_input("14. Nombre de relances déjà envoyées", min_value=0, value=0, step=1)
+
+type_client = st.selectbox(
+    "15. Type de client",
+    ["PME", "ETI", "Grand Compte", "Startup", "Administration publique", "International"],
+    help="Impacte fortement le coefficient de la limite crédit"
+)
+        
         # === NOM + SIREN ===
         nom_client = st.text_input("Nom de l'entreprise (facultatif)", placeholder="ex : SARL DUPONT", key="nom_client")
         siren_client = st.text_input("SIREN (facultatif)", placeholder="ex : 823456789", key="siren_client")
@@ -291,6 +342,21 @@ if page == "Simulation client":
                 score_ajuste = max(score_ajuste, 0.58)
             if resultat < -1000000:
                 score_ajuste = max(score_ajuste, 0.60)
+
+                        # =============================================
+            # LIMITE DE CRÉDIT – FORMULE RÉELLE (une seule fois !)
+            # =============================================
+            base_limite = (ca * delai_accorde_jours) / 365
+            ajust_garantie   = base_limite * (garantie_pct / 100)
+            ajust_relances   = -base_limite * 0.08 * max(0, nb_relances - 1)
+            coef_type = {"Grand Compte":1.35, "ETI":1.20, "Administration publique":1.40, "PME":1.0, "International":0.90, "Startup":0.70}.get(type_client, 1.0)
+            ajust_type = base_limite * (coef_type - 1)
+            ajust_terrain = 0
+            if litige: ajust_terrain -= base_limite * 0.30
+            if client_strategique: ajust_terrain += base_limite * 0.20
+            limite_credit_proposee = max(0, base_limite + ajust_garantie + ajust_relances + ajust_type + ajust_terrain - encours)
+            limite_credit_proposee = round(limite_credit_proposee)
+
             # ========================================================
             # AFFICHAGE FINAL – ALERTE ROUGE PRIORITAIRE
             # ============================================================
@@ -308,6 +374,7 @@ if page == "Simulation client":
                 st.error("ALERTE TRÉSORERIE NÉGATIVE – RISQUE CASH FLOW IMMINENT")
             elif tresorerie / total_bilan < 0.05:
                 st.warning("Trésorerie très faible (<5 % du bilan) – surveiller de très près")
+         
             # =========================================================
             # 6. CONSEILS AUTOMATIQUES SELON LE RISQUE AJUSTÉ
             # =========================================================
@@ -365,24 +432,30 @@ if page == "Simulation client":
             # 7. CONTRIBUTION ANONYME (amélioration continue du modèle)
             # =========================================================
             if contribuer:
-                donnees_anonymes = {
-                    "ca": ca,
+            donnees_anonymes = {
+                    "ca_ttc_prev": ca,
+                    "delai_accorde_jours": delai_accorde_jours,
+                    "encours": encours,
+                    "limite_credit_actuelle": limite_credit_actuelle,
+                    "garantie_pct": garantie_pct,
+                    "nb_relances": nb_relances,
+                    "type_client": type_client,
                     "resultat_net": resultat,
                     "total_bilan": total_bilan,
                     "fonds_propres": fonds_propres,
-                    "dettes_mlt": dettes_mlt,
-                    "dso": dso,
-                    "score_externe": score,
-                    "autonomie": autonomie,
+                    "tresorerie_nette": tresorerie,
+                    "autonomie_financiere": autonomie,
                     "endettement": endettement,
                     "region": region,
                     "secteur": secteur,
-                    "risque_ia": float(prob),
-                    "risque_ajuste": float(score_ajuste),
+                    "score_externe": score,
+                    "risque_ia": round(float(prob),6),
+                    "risque_ajuste": round(float(score_ajuste),6),
+                    "limite_credit_proposee": limite_credit_proposee,
+                    "litige": int(litige),
+                    "client_strategique": int(client_strategique),
                     "motif_retard": motif_retard,
-                    "litige": litige,
-                    "client_strategique": client_strategique,
-                    "commentaire": commentaire,
+                    "commentaire": commentaire or "",
                     "timestamp": datetime.now().isoformat()
                 }
                 try:
@@ -406,6 +479,7 @@ if page == "Simulation client":
                 st.session_state.last_motif = motif_retard
                 st.session_state.last_litige = litige
                 st.session_state.last_client_strategique = client_strategique
+                st.session_state.last_motif = motif_retard
                 st.session_state.save_now = True
 
     # ===================================================================
@@ -433,7 +507,7 @@ if page == "Simulation client":
             "Risque IA": f"{st.session_state.last_prob:.1%}",
             "Risque ajusté": f"{st.session_state.last_score_ajuste:.1%}",
             "Niveau": niveau,
-            "Justification": motif_retard
+            "Justification": st.session_state.get("last_motif", "Aucun")
         }
         st.session_state.historique.append(nouvelle_ligne)
         st.session_state.save_now = False
@@ -454,6 +528,29 @@ if page == "Simulation client":
         st.download_button("Télécharger", data=output.getvalue(), file_name=f"Credit_Risk_Salima_{datetime.now().strftime('%Y%m%d_%H%M')}.xlsx", type="primary")
     else:
         st.info("Aucune simulation – faites votre première prédiction !")
+
+# =============================================
+            # AFFICHAGE WAOU – RISQUE + LIMITE CRÉDIT
+            # =============================================
+            st.markdown(f"<h1 style='text-align: center; color: #C41E3A;'>Risque de défaut 90 jours : {prob:.1%}</h1>", unsafe_allow_html=True)
+            st.markdown(f"<h1 style='text-align: center; color: #2e8b57;'>LIMITE DE CRÉDIT PROPOSÉE → {limite_credit_proposee:,.0f} €</h1>", unsafe_allow_html=True)
+
+            colm1, colm2, colm3 = st.columns(3)
+            with colm1:
+                st.metric("Risque IA", f"{prob:.1%}")
+            with colm2:
+                delta = score_ajuste - prob
+                st.metric("Risque ajusté", f"{score_ajuste:.1%}", f"{delta:+.1%}", delta_color="inverse" if delta > 0 else "normal")
+            with colm3:
+                st.metric("Limite crédit proposée", f"{limite_credit_proposee:,.0f} €")
+
+# Ligne bonus qui tue (les Credit Managers adorent ça)
+st.markdown(
+    f"<h2 style='text-align: center; color: #2e8b57;'>"
+    f"LIMITE DE CRÉDIT RECOMMANDÉE → {limite_credit_proposee:,.0f} €"
+    f"</h2>",
+    unsafe_allow_html=True
+)
 
 # ===================================================================
 # PAGE CARTE DE FRANCE – VERSION 100 % SÉCURISÉE
@@ -532,3 +629,4 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
