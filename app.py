@@ -239,9 +239,12 @@ type_client = st.selectbox(
     help="Impacte fortement le coefficient de la limite crédit"
 )
         
-        # === NOM + SIREN ===
+         # === NOM + SIREN ===
         nom_client = st.text_input("Nom de l'entreprise (facultatif)", placeholder="ex : SARL DUPONT", key="nom_client")
         siren_client = st.text_input("SIREN (facultatif)", placeholder="ex : 823456789", key="siren_client")
+
+        # === BOUTON PRÉDICTION ===
+        if st.button("PRÉDIRE LE RISQUE DE DÉFAUT 90 JOURS", type="primary", use_container_width=True):
 
         # === BOUTON PRÉDICTION ===
         if st.button("PRÉDIRE LE RISQUE DE DÉFAUT 90 JOURS", type="primary", use_container_width=True):
@@ -629,4 +632,5 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
