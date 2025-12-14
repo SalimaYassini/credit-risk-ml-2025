@@ -239,27 +239,25 @@ type_client = st.selectbox(
     help="Impacte fortement le coefficient de la limite crédit"
 )
         
-         # === NOM + SIREN ===
-        nom_client = st.text_input("Nom de l'entreprise (facultatif)", placeholder="ex : SARL DUPONT", key="nom_client")
-        siren_client = st.text_input("SIREN (facultatif)", placeholder="ex : 823456789", key="siren_client")
+# === NOM + SIREN ===
+nom_client = st.text_input("Nom de l'entreprise (facultatif)", placeholder="ex : SARL DUPONT", key="nom_client")
+siren_client = st.text_input("SIREN (facultatif)", placeholder="ex : 823456789", key="siren_client")
 
         # === BOUTON PRÉDICTION ===
         if st.button("PRÉDIRE LE RISQUE DE DÉFAUT 90 JOURS", type="primary", use_container_width=True):
 
-        # === BOUTON PRÉDICTION ===
-        if st.button("PRÉDIRE LE RISQUE DE DÉFAUT 90 JOURS", type="primary", use_container_width=True):
-            # === DATAFRAME POUR LE MODÈLE ===
-            data = pd.DataFrame([{
-                "age_annees": 12,
-                "effectif": max(5, ca // 150000),
-                "CA_2022": ca * 0.92,
-                "resultat_net_2022": resultat * 0.85,
-                "CAF_2022": max(10000, resultat * 0.88),
-                "endettement_2022": endettement * 0.95,
-                "CA_2023": ca * 0.96,
-                "resultat_net_2023": resultat * 0.92,
-                "CAF_2023": max(10000, resultat * 0.94),
-                "endettement_2023": endettement * 0.98,
+    # === DATAFRAME POUR LE MODÈLE ===
+    data = pd.DataFrame([{
+        "age_annees": 12,
+        "effectif": max(5, ca // 150000),
+        "CA_2022": ca * 0.92,
+        "resultat_net_2022": resultat * 0.85,
+        "CAF_2022": max(10000, resultat * 0.88),
+        "endettement_2022": endettement * 0.95,
+        "CA_2023": ca * 0.96,
+        "resultat_net_2023": resultat * 0.92,
+        "CAF_2023": max(10000, resultat * 0.94),
+        "endettement_2023": endettement * 0.98,
                 "CA_2024": ca,
                 "resultat_net_2024": resultat,
                 "CAF_2024": max(10000, resultat),
@@ -632,5 +630,6 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
