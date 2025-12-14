@@ -172,7 +172,7 @@ if page == "Simulation client":
             value=True
         )
 
-            with col2:
+    with col2:
         st.markdown("### 8. Score externe")
         score = st.slider("Note Ellisphere / Altares / Coface (1=pire, 10=excellent)", 1.0, 10.0, 4.8, 0.1, key="score_externe")
         st.markdown("### 9. Région & Secteur")
@@ -605,6 +605,7 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
