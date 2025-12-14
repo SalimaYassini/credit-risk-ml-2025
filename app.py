@@ -187,7 +187,7 @@ if page == "Simulation client":
         ], key="secteur")
         forme = st.selectbox("Forme juridique", ["SAS","SARL","SA","EURL","Auto-entrepreneur","Autre"], index=0, key="forme")
 
-        # ==================================================================
+              # ==================================================================
         # 10. Paramètres de paiement & ajustements terrain
         # ==================================================================
         st.markdown("### 10. Paramètres de paiement & ajustements terrain")
@@ -199,20 +199,21 @@ if page == "Simulation client":
                 "CA TTC annuel réalisé N-1 ou prévisionnel N avec ce client (€)",
                 min_value=0, max_value=200000000, value=2400000, step=50000,
                 help="Montant des ventes TTC que VOUS (le fournisseur) réalisez ou prévoyez avec ce client sur 12 mois. "
-                     "C’est cette valeur qui pilote précisément la limite de crédit proposée."
+                     "C’est cette valeur qui pilote la limite de crédit proposée."
             )
         with c_delai:
             st.markdown("**Délai de paiement accordé sur facture (jours)**")
             st.info(f"**{delai_accorde} jours** (valeur reprise automatiquement de la section DSO)")
 
-        # Ligne 2 : Garantie
+        # Garantie / assurance-crédit (info seulement)
         garantie_pct = st.slider(
-            "Garantie ou assurance-crédit (%)",
+            "Garantie interne et/ou assurance-crédit couvrant ce client (%)",
             0, 100, 0,
-            help="0 = aucun couverture – 100 = totalement couvert par assurance ou caution"
+            help="Pour information – indique le % du risque couvert. "
+                 "Cela réduit le risque net exposé (affiché après calcul), mais n’augmente pas la limite brute."
         )
 
-        # Ligne 3 : Encours, limite actuelle, relances
+        # Ligne suivante : Encours, limite actuelle, relances
         c3, c4, c5 = st.columns(3)
         with c3:
             encours = st.number_input("Encours actuel (€)", min_value=0.0, value=0.0, format="%.0f")
@@ -221,7 +222,6 @@ if page == "Simulation client":
         with c5:
             nb_relances = st.number_input("Nombre de relances déjà envoyées", min_value=0, value=0, step=1)
 
-        # Type de client
         type_client = st.selectbox(
             "Type de client",
             ["PME", "ETI", "Grand Compte", "Startup", "Administration publique", "International"],
@@ -331,11 +331,12 @@ if page == "Simulation client":
             if resultat < -1000000:
                 score_ajuste = max(score_ajuste, 0.60)
 
-            # =============================================
-            # LIMITE DE CRÉDIT – FORMULE RÉELLE
+                        # =============================================
+            # LIMITE DE CRÉDIT – FORMULE RÉELLE (version pro)
             # =============================================
             base_limite = (ca_avec_client * delai_accorde) / 365
-            ajust_garantie = base_limite * (garantie_pct / 100)
+
+            # Ajustements terrain (sans bonus garantie auto)
             ajust_relances = -base_limite * 0.08 * max(0, nb_relances - 1)
             coef_type = {"Grand Compte":1.35, "ETI":1.20, "Administration publique":1.40, "PME":1.0, "International":0.90, "Startup":0.70}.get(type_client, 1.0)
             ajust_type = base_limite * (coef_type - 1)
@@ -344,17 +345,23 @@ if page == "Simulation client":
                 ajust_terrain -= base_limite * 0.30
             if client_strategique:
                 ajust_terrain += base_limite * 0.20
-            limite_credit_proposee = max(0, base_limite + ajust_garantie + ajust_relances + ajust_type + ajust_terrain - encours)
+
+            limite_credit_proposee = max(0, base_limite + ajust_relances + ajust_type + ajust_terrain - encours)
             limite_credit_proposee = round(limite_credit_proposee)
 
-                        # =============================================
-            # AFFICHAGE WAOU – RISQUE + LIMITE CRÉDIT
+            # Risque net exposé après garantie/assurance
+            risque_net = limite_credit_proposee * (1 - garantie_pct / 100)
+            risque_net = round(risque_net)
+
+            # =============================================
+            # AFFICHAGE WAOU
             # =============================================
             st.markdown(f"<h1 style='text-align: center; color: #C41E3A;'>Risque de défaut 90 jours : {prob:.1%}</h1>", unsafe_allow_html=True)
 
-            # Formatage avec espace comme séparateur de milliers (plus lisible en France)
-            limite_formatee = f"{limite_credit_proposee:,.0f}".replace(",", " ")
+            limite_formatee = f"{limite_credit_proposee:,}".replace(",", " ")
             st.markdown(f"<h1 style='text-align: center; color: #2e8b57;'>LIMITE DE CRÉDIT PROPOSÉE → {limite_formatee} €</h1>", unsafe_allow_html=True)
+
+            st.info(f"**Risque net exposé** (après garantie/assurance {garantie_pct} %) : **{risque_net:,} €**".replace(",", " "))
 
             colm1, colm2, colm3 = st.columns(3)
             with colm1:
@@ -605,6 +612,7 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
