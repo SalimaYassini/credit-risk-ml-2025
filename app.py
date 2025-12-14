@@ -442,7 +442,7 @@ if page == "Simulation client":
             if contribuer:
                 donnees_anonymes = {
                     "ca_ttc_prev": ca,
-                    "delai_accorde_jours": delai_accorde_jours,
+                    "delai_accorde_jours": delai_accorde,
                     "encours": encours,
                     "limite_credit_actuelle": limite_credit_actuelle,
                     "garantie_pct": garantie_pct,
@@ -606,6 +606,7 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
