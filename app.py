@@ -82,7 +82,6 @@ if page == "Simulation client":
     st.markdown("## Scoring prédictif de défaut 90 jours avant")
     st.info("Saisissez les 10 paramètres clés – tout est dans le bilan ou liasse fiscale et balance âgée")
     col1, col2 = st.columns(2)
-
     with col1:
         st.markdown("### 1. Chiffre d'affaires 2024")
         ca = st.number_input("Chiffre d'affaires HT 2024 (€)", 100000, 200000000, 2400000, step=50000,
@@ -96,7 +95,6 @@ if page == "Simulation client":
         st.markdown("### 4. Fonds propres")
         fonds_propres = st.number_input("Capitaux propres (€)", min_value=-50000000, max_value=100000000, value=1200000, step=10000,
                                         help="Liasse ligne (DL +DO + DR) moins AA → peut être négatif en cas de pertes accumulées")
-
         # === AUTONOMIE FINANCIÈRE ===
         if total_bilan > 0:
             autonomie = round((fonds_propres / total_bilan) * 100, 1)
@@ -117,7 +115,6 @@ if page == "Simulation client":
         else:
             autonomie = 0
             st.error("Total bilan = 0 → impossible de calculer l’autonomie financière")
-
         st.markdown("### 5. Trésorerie nette")
         tresorerie = st.number_input("Trésorerie nette (€)", min_value=-50000000, max_value=50000000, value=0, step=10000,
                                      help="Liasse lignes (CD + CF) moins (EH + YS). Négatif = alerte cash !")
@@ -125,7 +122,6 @@ if page == "Simulation client":
             st.error("ALERTE TRÉSORERIE NÉGATIVE – RISQUE CASH FLOW IMMINENT")
         elif tresorerie / total_bilan < 0.05:
             st.warning("Trésorerie très faible (<5 % du bilan) – surveiller de très près")
-
         # === ENDETTEMENT FINANCIER ===
         st.markdown("### 6. Emprunts & dettes financières")
         dettes_mlt = st.number_input("Emprunts + dettes financières (€)", 0, 100000000, 800000, step=10000,
@@ -142,13 +138,11 @@ if page == "Simulation client":
         else:
             endettement = 999
             st.error("Fonds propres = 0 → ratio d’endettement infini")
-
         st.markdown("### 7. DSO réel – LE + IMPORTANT")
         delai_accorde = st.number_input("Délai accordé sur facture (jours)", 0, 180, 45, step=5)
         retard_moyen = st.slider("Retard moyen observé (jours)", 0, 120, 27)
         dso = delai_accorde + retard_moyen
         st.success(f"DSO réel **{dso} jours**")
-
         # === JUSTIFICATION TERRAIN ===
         st.markdown("### Justification terrain (optionnelle – améliore le score)")
         with st.expander("Expliquer la nature du retard → ajuster le risque réel", expanded=False):
@@ -164,15 +158,13 @@ if page == "Simulation client":
                 client_strategique = st.checkbox("Client stratégique (on garde malgré DSO élevé)", value=False)
                 commentaire = st.text_input("Commentaire rapide (ex : avoir 12k€ en attente)",
                                           placeholder="Facultatif", key="com_justif")
-
         # === CONTRIBUTION ANONYME ===
         st.markdown("### Contribuer à rendre l’outil encore plus intelligent ?")
         contribuer = st.checkbox(
             "Oui, j’autorise l’envoi anonyme de cette simulation pour améliorer le modèle national",
             value=True
         )
-
-with col2:
+    with col2:
         st.markdown("### 8. Score externe")
         score = st.slider("Note Ellisphere / Altares / Coface (1=pire, 10=excellent)", 1.0, 10.0, 4.8, 0.1, key="score_externe")
         st.markdown("### 9. Région & Secteur")
@@ -329,11 +321,10 @@ with col2:
             if resultat < -1000000:
                 score_ajuste = max(score_ajuste, 0.60)
 
-                        # =============================================
+            # =============================================
             # LIMITE DE CRÉDIT – FORMULE RÉELLE (version pro)
             # =============================================
             base_limite = (ca_avec_client * delai_accorde) / 365
-
             # Ajustements terrain (sans bonus garantie auto)
             ajust_relances = -base_limite * 0.08 * max(0, nb_relances - 1)
             coef_type = {"Grand Compte":1.35, "ETI":1.20, "Administration publique":1.40, "PME":1.0, "International":0.90, "Startup":0.70}.get(type_client, 1.0)
@@ -343,24 +334,18 @@ with col2:
                 ajust_terrain -= base_limite * 0.30
             if client_strategique:
                 ajust_terrain += base_limite * 0.20
-
             limite_credit_proposee = max(0, base_limite + ajust_relances + ajust_type + ajust_terrain - encours)
             limite_credit_proposee = round(limite_credit_proposee)
-
             # Risque net exposé après garantie/assurance
             risque_net = limite_credit_proposee * (1 - garantie_pct / 100)
             risque_net = round(risque_net)
-
             # =============================================
             # AFFICHAGE WAOU
             # =============================================
             st.markdown(f"<h1 style='text-align: center; color: #C41E3A;'>Risque de défaut 90 jours : {prob:.1%}</h1>", unsafe_allow_html=True)
-
             limite_formatee = f"{limite_credit_proposee:,}".replace(",", " ")
             st.markdown(f"<h1 style='text-align: center; color: #2e8b57;'>LIMITE DE CRÉDIT PROPOSÉE → {limite_formatee} €</h1>", unsafe_allow_html=True)
-
             st.info(f"**Risque net exposé** (après garantie/assurance {garantie_pct} %) : **{risque_net:,} €**".replace(",", " "))
-
             colm1, colm2, colm3 = st.columns(3)
             with colm1:
                 st.metric("Risque IA", f"{prob:.1%}")
@@ -369,7 +354,6 @@ with col2:
                 st.metric("Risque ajusté", f"{score_ajuste:.1%}", f"{delta:+.1%}", delta_color="inverse" if delta > 0 else "normal")
             with colm3:
                 st.metric("Limite crédit proposée", f"{limite_formatee} €")
-
             # =========================================================
             # ALERTES ROUGES ET CONSEILS
             # =========================================================
@@ -382,12 +366,10 @@ with col2:
                 st.success(f"Risque ajusté expertise terrain : **{score_ajuste:.1%}** ↓ {abs(ajustement):.1%} (justifications solides)")
             else:
                 st.info(f"Risque terrain proche du modèle IA : **{score_ajuste:.1%}**")
-
             if tresorerie < 0:
                 st.error("ALERTE TRÉSORERIE NÉGATIVE – RISQUE CASH FLOW IMMINENT")
             elif tresorerie / total_bilan < 0.05:
                 st.warning("Trésorerie très faible (<5 % du bilan) – surveiller de très près")
-
             st.markdown("### Actions recommandées :")
             conseils = []
             if score_ajuste < 0.10:
@@ -425,7 +407,6 @@ with col2:
                     "Transmission directe au service contentieux",
                     "Sortie recommandée du portefeuille"
                 ]
-
             if dso > 90:
                 conseils.append("DSO critique (>90 jours) → blocage J+15 obligatoire")
             if fonds_propres < 0:
@@ -436,10 +417,8 @@ with col2:
                 conseils.append("Endettement excessif → réduction drastique de l’encours")
             if score < 3.5:
                 conseils.append("Score externe très faible → assurance-crédit obligatoire")
-
             for conseil in conseils:
                 st.markdown(f"• {conseil}")
-
             # =========================================================
             # CONTRIBUTION ANONYME
             # =========================================================
@@ -478,7 +457,6 @@ with col2:
                     )
                 except:
                     pass
-
                 # Sauvegarde session
                 st.session_state.current_client = nom_client
                 st.session_state.current_siren = siren_client
@@ -494,51 +472,50 @@ with col2:
                 st.session_state.last_client_strategique = client_strategique
                 st.session_state.save_now = True
 
-# ===================================================================
-# HISTORIQUE PAR CLIENT
-# ===================================================================
-st.markdown("### Historique par client & Export Excel")
-if st.session_state.get("save_now", False):
-   niveau = "FAIBLE"
-if st.session_state.last_score_ajuste >= 0.40:
-   niveau = "TRÈS ÉLEVÉ"
-elif st.session_state.last_score_ajuste >= 0.20:
-   niveau = "ÉLEVÉ"
-elif st.session_state.last_score_ajuste >= 0.10:
-     niveau = "MODÉRÉ"
-     nouvelle_ligne = {
-        "Date": datetime.now().strftime("%d/%m %H:%M"),
-        "Client": st.session_state.current_client or "Anonyme",
-        "SIREN": st.session_state.current_siren or "-",
-        "CA 2024": f"{ca:,} €",
-        "Résultat net": f"{resultat:,} €",
-        "Fonds propres": f"{fonds_propres:,} €",
-        "Autonomie": f"{autonomie:.1f}%" if total_bilan > 0 else "NC",
-        "DSO": int(dso),
-        "Risque IA": f"{st.session_state.last_prob:.1%}",
-        "Risque ajusté": f"{st.session_state.last_score_ajuste:.1%}",
-        "Niveau": niveau,
-        "Justification": st.session_state.get("last_motif", "Aucun")
-    }
-   st.session_state.historique.append(nouvelle_ligne)
-   st.session_state.save_now = False
-   st.success("Simulation sauvegardée !")
-
-if st.session_state.historique:
-    df = pd.DataFrame(st.session_state.historique)
-    clients = ["Tous les clients"] + sorted([c for c in df["Client"].unique() if c != "Anonyme"])
-if "Anonyme" in df["Client"].values:
-    clients.append("Anonyme")
-    client_choisi = st.selectbox("Filtrer par client :", clients, key="client_filter")
-    df_show = df if client_choisi == "Tous les clients" else df[df["Client"] == client_choisi]
-    st.write(f"**{len(df_show)} simulation(s)** pour **{client_choisi}**")
-    st.dataframe(df_show.sort_values("Date", ascending=False), use_container_width=True)
-    output = io.BytesIO()
-    df.to_excel(output, index=False, engine="openpyxl")
-    output.seek(0)
-    st.download_button("Télécharger", data=output.getvalue(), file_name=f"Credit_Risk_Salima_{datetime.now().strftime('%Y%m%d_%H%M')}.xlsx", type="primary")
-else:
-    st.info("Aucune simulation – faites votre première prédiction !")
+    # ===================================================================
+    # HISTORIQUE PAR CLIENT
+    # ===================================================================
+    st.markdown("### Historique par client & Export Excel")
+    if st.session_state.get("save_now", False):
+        niveau = "FAIBLE"
+        if st.session_state.last_score_ajuste >= 0.40:
+            niveau = "TRÈS ÉLEVÉ"
+        elif st.session_state.last_score_ajuste >= 0.20:
+            niveau = "ÉLEVÉ"
+        elif st.session_state.last_score_ajuste >= 0.10:
+            niveau = "MODÉRÉ"
+        nouvelle_ligne = {
+            "Date": datetime.now().strftime("%d/%m %H:%M"),
+            "Client": st.session_state.current_client or "Anonyme",
+            "SIREN": st.session_state.current_siren or "-",
+            "CA 2024": f"{ca:,} €",
+            "Résultat net": f"{resultat:,} €",
+            "Fonds propres": f"{fonds_propres:,} €",
+            "Autonomie": f"{autonomie:.1f}%" if total_bilan > 0 else "NC",
+            "DSO": int(dso),
+            "Risque IA": f"{st.session_state.last_prob:.1%}",
+            "Risque ajusté": f"{st.session_state.last_score_ajuste:.1%}",
+            "Niveau": niveau,
+            "Justification": st.session_state.get("last_motif", "Aucun")
+        }
+        st.session_state.historique.append(nouvelle_ligne)
+        st.session_state.save_now = False
+        st.success("Simulation sauvegardée !")
+    if st.session_state.historique:
+        df = pd.DataFrame(st.session_state.historique)
+        clients = ["Tous les clients"] + sorted([c for c in df["Client"].unique() if c != "Anonyme"])
+        if "Anonyme" in df["Client"].values:
+            clients.append("Anonyme")
+        client_choisi = st.selectbox("Filtrer par client :", clients, key="client_filter")
+        df_show = df if client_choisi == "Tous les clients" else df[df["Client"] == client_choisi]
+        st.write(f"**{len(df_show)} simulation(s)** pour **{client_choisi}**")
+        st.dataframe(df_show.sort_values("Date", ascending=False), use_container_width=True)
+        output = io.BytesIO()
+        df.to_excel(output, index=False, engine="openpyxl")
+        output.seek(0)
+        st.download_button("Télécharger", data=output.getvalue(), file_name=f"Credit_Risk_Salima_{datetime.now().strftime('%Y%m%d_%H%M')}.xlsx", type="primary")
+    else:
+        st.info("Aucune simulation – faites votre première prédiction !")
 
 # ===================================================================
 # PAGE CARTE DE FRANCE
@@ -610,12 +587,3 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
-
-
-
-
-
-
-
-
-
