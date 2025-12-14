@@ -172,7 +172,7 @@ if page == "Simulation client":
             value=True
         )
 
-    with col2:
+with col2:
         st.markdown("### 8. Score externe")
         score = st.slider("Note Ellisphere / Altares / Coface (1=pire, 10=excellent)", 1.0, 10.0, 4.8, 0.1, key="score_externe")
         st.markdown("### 9. Région & Secteur")
@@ -187,12 +187,11 @@ if page == "Simulation client":
         ], key="secteur")
         forme = st.selectbox("Forme juridique", ["SAS","SARL","SA","EURL","Auto-entrepreneur","Autre"], index=0, key="forme")
 
-              # ==================================================================
+        # ==================================================================
         # 10. Paramètres de paiement & ajustements terrain
         # ==================================================================
         st.markdown("### 10. Paramètres de paiement & ajustements terrain")
 
-        # Ligne 1 : CA TTC avec le client + Délai (reprise auto)
         c_ca, c_delai = st.columns(2)
         with c_ca:
             ca_avec_client = st.number_input(
@@ -205,15 +204,13 @@ if page == "Simulation client":
             st.markdown("**Délai de paiement accordé sur facture (jours)**")
             st.info(f"**{delai_accorde} jours** (valeur reprise automatiquement de la section DSO)")
 
-        # Garantie / assurance-crédit (info seulement)
         garantie_pct = st.slider(
             "Garantie interne et/ou assurance-crédit couvrant ce client (%)",
             0, 100, 0,
             help="Pour information – indique le % du risque couvert. "
-                 "Cela réduit le risque net exposé (affiché après calcul), mais n’augmente pas la limite brute."
+                 "Cela réduit le risque net exposé (affiché après calcul)."
         )
 
-        # Ligne suivante : Encours, limite actuelle, relances
         c3, c4, c5 = st.columns(3)
         with c3:
             encours = st.number_input("Encours actuel (€)", min_value=0.0, value=0.0, format="%.0f")
@@ -227,6 +224,7 @@ if page == "Simulation client":
             ["PME", "ETI", "Grand Compte", "Startup", "Administration publique", "International"],
             help="Impacte fortement le coefficient de la limite crédit"
         )
+
         # === NOM + SIREN ===
         nom_client = st.text_input("Nom de l'entreprise (facultatif)", placeholder="ex : SARL DUPONT", key="nom_client")
         siren_client = st.text_input("SIREN (facultatif)", placeholder="ex : 823456789", key="siren_client")
@@ -612,6 +610,7 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
