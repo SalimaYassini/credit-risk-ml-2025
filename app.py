@@ -334,11 +334,38 @@ if page == "Simulation client":
                 ajust_terrain -= base_limite * 0.30
             if client_strategique:
                 ajust_terrain += base_limite * 0.20
-            limite_credit_proposee = max(0, base_limite + ajust_relances + ajust_type + ajust_terrain - encours)
+            limite_credit_proposee = max(0, base_limite + ajust_relances + ajust_type + ajust_terrain)
             limite_credit_proposee = round(limite_credit_proposee)
             # Risque net exposé après garantie/assurance (en montant €)
             risque_net = max(0, limite_credit_proposee - garantie_montant)
             risque_net = round(risque_net)
+
+                        # =============================================
+            # ALERTES INTELLIGENTES SUR DÉPASSEMENT D'ENCOURS
+            # =============================================
+            if encours > limite_credit_proposee:
+                taux_depassement = (encours - limite_credit_proposee) / limite_credit_proposee * 100
+                if taux_depassement > 20:
+                    st.error(f"⚠️ ENCOURS EN DÉPASSEMENT IMPORTANT ({encours:,} € vs limite {limite_credit_proposee:,} €)")
+                    st.markdown("""
+                    **Actions recommandées :**
+                    - Analyser la cause (retard administratif ? litige ?)
+                    - Demander garantie supplémentaire ou extension assurance-crédit
+                    - Mise en demeure si retard > 60 jours
+                    - Blocage livraisons si risque net trop élevé
+                    """)
+                else:
+                    st.warning(f"Encours en léger dépassement ({encours:,} € vs limite {limite_credit_proposee:,} €)")
+                    st.markdown("""
+                    **Actions possibles :**
+                    - Surveillance renforcée des paiements
+                    - Relance amiable + proposition escompte
+                    - Demander garantie interne si client stratégique
+                    """)
+            elif encours > limite_credit_proposee * 0.8:
+                st.info(f"Encours élevé ({encours:,} € – {round(encours / limite_credit_proposee * 100)} % de la limite)")
+                st.markdown("Client proche du plafond – anticiper les prochaines commandes.")
+                
             # =============================================
             # AFFICHAGE WAOU
             # =============================================
@@ -587,4 +614,5 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
