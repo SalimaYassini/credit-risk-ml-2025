@@ -243,8 +243,8 @@ type_client = st.selectbox(
 nom_client = st.text_input("Nom de l'entreprise (facultatif)", placeholder="ex : SARL DUPONT", key="nom_client")
 siren_client = st.text_input("SIREN (facultatif)", placeholder="ex : 823456789", key="siren_client")
 
-        # === BOUTON PRÉDICTION ===
-        if st.button("PRÉDIRE LE RISQUE DE DÉFAUT 90 JOURS", type="primary", use_container_width=True):
+# === BOUTON PRÉDICTION ===
+if st.button("PRÉDIRE LE RISQUE DE DÉFAUT 90 JOURS", type="primary", use_container_width=True):
 
     # === DATAFRAME POUR LE MODÈLE ===
     data = pd.DataFrame([{
@@ -630,6 +630,7 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
