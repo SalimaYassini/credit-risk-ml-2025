@@ -187,22 +187,32 @@ if page == "Simulation client":
         ], key="secteur")
         forme = st.selectbox("Forme juridique", ["SAS","SARL","SA","EURL","Auto-entrepreneur","Autre"], index=0, key="forme")
 
-                # ==================================================================
+                       # ==================================================================
         # 10. Paramètres de paiement & ajustements terrain
         # ==================================================================
         st.markdown("### 10. Paramètres de paiement & ajustements terrain")
 
-        c1, c2 = st.columns(2)
-        with c1:
+        # Ligne 1 : CA TTC avec le client + Délai (reprise auto)
+        c_ca, c_delai = st.columns(2)
+        with c_ca:
+            ca_avec_client = st.number_input(
+                "CA TTC annuel réalisé N-1 ou prévisionnel N avec ce client (€)",
+                min_value=0, max_value=200000000, value=2400000, step=50000,
+                help="Montant des ventes TTC que VOUS (le fournisseur) réalisez ou prévoyez avec ce client sur 12 mois. "
+                     "C’est cette valeur qui pilote précisément la limite de crédit proposée."
+            )
+        with c_delai:
             st.markdown("**Délai de paiement accordé sur facture (jours)**")
             st.info(f"**{delai_accorde} jours** (valeur reprise automatiquement de la section DSO)")
-        with c2:
-            garantie_pct = st.slider(
-                "Garantie ou assurance-crédit (%)",
-                0, 100, 0,
-                help="0 = aucun couverture – 100 = totalement couvert par assurance ou caution"
-            )
 
+        # Ligne 2 : Garantie
+        garantie_pct = st.slider(
+            "Garantie ou assurance-crédit (%)",
+            0, 100, 0,
+            help="0 = aucun couverture – 100 = totalement couvert par assurance ou caution"
+        )
+
+        # Ligne 3 : Encours, limite actuelle, relances
         c3, c4, c5 = st.columns(3)
         with c3:
             encours = st.number_input("Encours actuel (€)", min_value=0.0, value=0.0, format="%.0f")
@@ -211,6 +221,7 @@ if page == "Simulation client":
         with c5:
             nb_relances = st.number_input("Nombre de relances déjà envoyées", min_value=0, value=0, step=1)
 
+        # Type de client
         type_client = st.selectbox(
             "Type de client",
             ["PME", "ETI", "Grand Compte", "Startup", "Administration publique", "International"],
@@ -324,7 +335,7 @@ if page == "Simulation client":
             # =============================================
             # LIMITE DE CRÉDIT – FORMULE RÉELLE
             # =============================================
-            base_limite = (ca * delai_accorde_jours) / 365
+            base_limite = (ca_avec_client * delai_accorde) / 365
             ajust_garantie = base_limite * (garantie_pct / 100)
             ajust_relances = -base_limite * 0.08 * max(0, nb_relances - 1)
             coef_type = {"Grand Compte":1.35, "ETI":1.20, "Administration publique":1.40, "PME":1.0, "International":0.90, "Startup":0.70}.get(type_client, 1.0)
@@ -595,5 +606,6 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
