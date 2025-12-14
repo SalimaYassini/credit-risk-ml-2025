@@ -80,7 +80,7 @@ page = st.sidebar.radio("Navigation", ["Simulation client", "Carte de France", "
 # ===================================================================
 if page == "Simulation client":
     st.markdown("## Scoring prédictif de défaut 90 jours avant")
-    st.info("Saisissez les 15 chiffres clés – tout est dans le bilan ou liasse fiscale et balance âgée")
+    st.info("Saisissez les 10 paramètres clés – tout est dans le bilan ou liasse fiscale et balance âgée")
     col1, col2 = st.columns(2)
 
     with col1:
@@ -187,34 +187,32 @@ if page == "Simulation client":
         ], key="secteur")
         forme = st.selectbox("Forme juridique", ["SAS","SARL","SA","EURL","Auto-entrepreneur","Autre"], index=0, key="forme")
 
+                # ==================================================================
+        # 10. Paramètres de paiement & ajustements terrain
         # ==================================================================
-        # 10-15 — Paramètres de paiement & ajustements terrain
-        # ==================================================================
-        st.markdown("### 10-15 — Paramètres de paiement & ajustements terrain")
+        st.markdown("### 10. Paramètres de paiement & ajustements terrain")
+
         c1, c2 = st.columns(2)
         with c1:
-            delai_accorde_jours = st.number_input(
-                "10. Délai de paiement accordé sur facture (jours)",
-                min_value=0, max_value=180, value=45, step=5,
-                help="30, 45, 60, 90, 120… C’est cette valeur qui pilote directement la limite crédit"
-            )
+            st.markdown("**Délai de paiement accordé sur facture (jours)**")
+            st.info(f"**{delai_accorde} jours** (valeur reprise automatiquement de la section DSO)")
         with c2:
             garantie_pct = st.slider(
-                "11. Garantie ou assurance-crédit (%)",
+                "Garantie ou assurance-crédit (%)",
                 0, 100, 0,
                 help="0 = aucun couverture – 100 = totalement couvert par assurance ou caution"
             )
 
         c3, c4, c5 = st.columns(3)
         with c3:
-            encours = st.number_input("12. Encours actuel (€)", min_value=0.0, value=0.0, format="%.0f")
+            encours = st.number_input("Encours actuel (€)", min_value=0.0, value=0.0, format="%.0f")
         with c4:
-            limite_credit_actuelle = st.number_input("13. Limite de crédit actuelle (€)", min_value=0.0, value=0.0, format="%.0f")
+            limite_credit_actuelle = st.number_input("Limite de crédit actuelle (€)", min_value=0.0, value=0.0, format="%.0f")
         with c5:
-            nb_relances = st.number_input("14. Nombre de relances déjà envoyées", min_value=0, value=0, step=1)
+            nb_relances = st.number_input("Nombre de relances déjà envoyées", min_value=0, value=0, step=1)
 
         type_client = st.selectbox(
-            "15. Type de client",
+            "Type de client",
             ["PME", "ETI", "Grand Compte", "Startup", "Administration publique", "International"],
             help="Impacte fortement le coefficient de la limite crédit"
         )
@@ -597,4 +595,5 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
