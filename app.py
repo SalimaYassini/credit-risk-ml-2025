@@ -494,51 +494,51 @@ with col2:
                 st.session_state.last_client_strategique = client_strategique
                 st.session_state.save_now = True
 
-    # ===================================================================
-    # HISTORIQUE PAR CLIENT
-    # ===================================================================
-    st.markdown("### Historique par client & Export Excel")
-    if st.session_state.get("save_now", False):
-        niveau = "FAIBLE"
-        if st.session_state.last_score_ajuste >= 0.40:
-            niveau = "TRÈS ÉLEVÉ"
-        elif st.session_state.last_score_ajuste >= 0.20:
-            niveau = "ÉLEVÉ"
-        elif st.session_state.last_score_ajuste >= 0.10:
-            niveau = "MODÉRÉ"
-        nouvelle_ligne = {
-            "Date": datetime.now().strftime("%d/%m %H:%M"),
-            "Client": st.session_state.current_client or "Anonyme",
-            "SIREN": st.session_state.current_siren or "-",
-            "CA 2024": f"{ca:,} €",
-            "Résultat net": f"{resultat:,} €",
-            "Fonds propres": f"{fonds_propres:,} €",
-            "Autonomie": f"{autonomie:.1f}%" if total_bilan > 0 else "NC",
-            "DSO": int(dso),
-            "Risque IA": f"{st.session_state.last_prob:.1%}",
-            "Risque ajusté": f"{st.session_state.last_score_ajuste:.1%}",
-            "Niveau": niveau,
-            "Justification": st.session_state.get("last_motif", "Aucun")
-        }
-        st.session_state.historique.append(nouvelle_ligne)
-        st.session_state.save_now = False
-        st.success("Simulation sauvegardée !")
+# ===================================================================
+# HISTORIQUE PAR CLIENT
+# ===================================================================
+st.markdown("### Historique par client & Export Excel")
+if st.session_state.get("save_now", False):
+   niveau = "FAIBLE"
+if st.session_state.last_score_ajuste >= 0.40:
+   niveau = "TRÈS ÉLEVÉ"
+elif st.session_state.last_score_ajuste >= 0.20:
+   niveau = "ÉLEVÉ"
+elif st.session_state.last_score_ajuste >= 0.10:
+     niveau = "MODÉRÉ"
+     nouvelle_ligne = {
+        "Date": datetime.now().strftime("%d/%m %H:%M"),
+        "Client": st.session_state.current_client or "Anonyme",
+        "SIREN": st.session_state.current_siren or "-",
+        "CA 2024": f"{ca:,} €",
+        "Résultat net": f"{resultat:,} €",
+        "Fonds propres": f"{fonds_propres:,} €",
+        "Autonomie": f"{autonomie:.1f}%" if total_bilan > 0 else "NC",
+        "DSO": int(dso),
+        "Risque IA": f"{st.session_state.last_prob:.1%}",
+        "Risque ajusté": f"{st.session_state.last_score_ajuste:.1%}",
+        "Niveau": niveau,
+        "Justification": st.session_state.get("last_motif", "Aucun")
+    }
+   st.session_state.historique.append(nouvelle_ligne)
+   st.session_state.save_now = False
+   st.success("Simulation sauvegardée !")
 
-    if st.session_state.historique:
-        df = pd.DataFrame(st.session_state.historique)
-        clients = ["Tous les clients"] + sorted([c for c in df["Client"].unique() if c != "Anonyme"])
-        if "Anonyme" in df["Client"].values:
-            clients.append("Anonyme")
-        client_choisi = st.selectbox("Filtrer par client :", clients, key="client_filter")
-        df_show = df if client_choisi == "Tous les clients" else df[df["Client"] == client_choisi]
-        st.write(f"**{len(df_show)} simulation(s)** pour **{client_choisi}**")
-        st.dataframe(df_show.sort_values("Date", ascending=False), use_container_width=True)
-        output = io.BytesIO()
-        df.to_excel(output, index=False, engine="openpyxl")
-        output.seek(0)
-        st.download_button("Télécharger", data=output.getvalue(), file_name=f"Credit_Risk_Salima_{datetime.now().strftime('%Y%m%d_%H%M')}.xlsx", type="primary")
-    else:
-        st.info("Aucune simulation – faites votre première prédiction !")
+if st.session_state.historique:
+    df = pd.DataFrame(st.session_state.historique)
+    clients = ["Tous les clients"] + sorted([c for c in df["Client"].unique() if c != "Anonyme"])
+if "Anonyme" in df["Client"].values:
+    clients.append("Anonyme")
+    client_choisi = st.selectbox("Filtrer par client :", clients, key="client_filter")
+    df_show = df if client_choisi == "Tous les clients" else df[df["Client"] == client_choisi]
+    st.write(f"**{len(df_show)} simulation(s)** pour **{client_choisi}**")
+    st.dataframe(df_show.sort_values("Date", ascending=False), use_container_width=True)
+    output = io.BytesIO()
+    df.to_excel(output, index=False, engine="openpyxl")
+    output.seek(0)
+    st.download_button("Télécharger", data=output.getvalue(), file_name=f"Credit_Risk_Salima_{datetime.now().strftime('%Y%m%d_%H%M')}.xlsx", type="primary")
+else:
+    st.info("Aucune simulation – faites votre première prédiction !")
 
 # ===================================================================
 # PAGE CARTE DE FRANCE
@@ -610,6 +610,7 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
