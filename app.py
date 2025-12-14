@@ -339,11 +339,14 @@ if page == "Simulation client":
             limite_credit_proposee = max(0, base_limite + ajust_garantie + ajust_relances + ajust_type + ajust_terrain - encours)
             limite_credit_proposee = round(limite_credit_proposee)
 
-            # =============================================
+                        # =============================================
             # AFFICHAGE WAOU – RISQUE + LIMITE CRÉDIT
             # =============================================
             st.markdown(f"<h1 style='text-align: center; color: #C41E3A;'>Risque de défaut 90 jours : {prob:.1%}</h1>", unsafe_allow_html=True)
-            st.markdown(f"<h1 style='text-align: center; color: #2e8b57;'>LIMITE DE CRÉDIT PROPOSÉE → {limite_credit_proposee:,.0f} €</h1>", unsafe_allow_html=True)
+
+            # Formatage avec espace comme séparateur de milliers (plus lisible en France)
+            limite_formatee = f"{limite_credit_proposee:,.0f}".replace(",", " ")
+            st.markdown(f"<h1 style='text-align: center; color: #2e8b57;'>LIMITE DE CRÉDIT PROPOSÉE → {limite_formatee} €</h1>", unsafe_allow_html=True)
 
             colm1, colm2, colm3 = st.columns(3)
             with colm1:
@@ -352,7 +355,7 @@ if page == "Simulation client":
                 delta = score_ajuste - prob
                 st.metric("Risque ajusté", f"{score_ajuste:.1%}", f"{delta:+.1%}", delta_color="inverse" if delta > 0 else "normal")
             with colm3:
-                st.metric("Limite crédit proposée", f"{limite_credit_proposee:,.0f} €")
+                st.metric("Limite crédit proposée", f"{limite_formatee} €")
 
             # =========================================================
             # ALERTES ROUGES ET CONSEILS
@@ -594,3 +597,4 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
