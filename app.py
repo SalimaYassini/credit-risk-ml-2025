@@ -285,8 +285,8 @@ siren_client = st.text_input("SIREN (facultatif)", placeholder="ex : 823456789",
                 "signal_perte_3ans": int(resultat < 0)
             }])
 
-            # === PRÉDICTION ===
-            prob = (xgb.predict_proba(data)[0,1] + lgb.predict_proba(data)[0,1] + cat.predict_proba(data)[0,1]) / 3
+        # === PRÉDICTION ===
+        prob = (xgb.predict_proba(data)[0,1] + lgb.predict_proba(data)[0,1] + cat.predict_proba(data)[0,1]) / 3
 
             # ===========================================================
             # AJUSTEMENT TERRAIN EXPERT SALIMA YASSINI – VERSION FINALE 100 % SÉCURISÉE 2025
@@ -630,6 +630,7 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
