@@ -340,31 +340,33 @@ if page == "Simulation client":
             risque_net = max(0, limite_credit_proposee - garantie_montant)
             risque_net = round(risque_net)
 
-                        # =============================================
-            # ALERTES INTELLIGENTES SUR DÉPASSEMENT D'ENCOURS
             # =============================================
+            # ALERTES INTELLIGENTES SUR DÉPASSEMENT (tenant compte de la garantie)
+            # =============================================
+            risque_net = max(0, limite_credit_proposee - garantie_montant)
+
             if encours > limite_credit_proposee:
-                taux_depassement = (encours - limite_credit_proposee) / limite_credit_proposee * 100
-                if taux_depassement > 20:
-                    st.error(f"⚠️ ENCOURS EN DÉPASSEMENT IMPORTANT ({encours:,} € vs limite {limite_credit_proposee:,} €)")
+                # Dépassement brut existe
+                if risque_net == 0:
+                    st.success(f"Encours en dépassement ({encours:,} € vs limite {limite_credit_proposee:,} €) "
+                               f"mais **totalement couvert** par garantie/assurance ({garantie_montant:,} €). "
+                               f"Risque net exposé = 0 € → Tolérable.")
+                elif risque_net <= limite_credit_proposee * 0.2:
+                    st.info(f"Encours en dépassement mais risque net faible ({risque_net:,} € exposé après garantie). "
+                            f"Surveillance OK si client stratégique.")
+                else:
+                    st.warning(f"⚠️ Encours en dépassement ({encours:,} € vs limite {limite_credit_proposee:,} €) "
+                               f"et risque net exposé élevé ({risque_net:,} € après garantie {garantie_montant:,} €).")
                     st.markdown("""
                     **Actions recommandées :**
-                    - Analyser la cause (retard administratif ? litige ?)
-                    - Demander garantie supplémentaire ou extension assurance-crédit
-                    - Mise en demeure si retard > 60 jours
-                    - Blocage livraisons si risque net trop élevé
-                    """)
-                else:
-                    st.warning(f"Encours en léger dépassement ({encours:,} € vs limite {limite_credit_proposee:,} €)")
-                    st.markdown("""
-                    **Actions possibles :**
-                    - Surveillance renforcée des paiements
-                    - Relance amiable + proposition escompte
-                    - Demander garantie interne si client stratégique
+                    - Analyser la cause du dépassement (retard ? croissance ?)
+                    - Demander extension garantie ou assurance-crédit
+                    - Relance + mise en demeure si retard important
+                    - Blocage partiel ou total si risque non maîtrisé
                     """)
             elif encours > limite_credit_proposee * 0.8:
-                st.info(f"Encours élevé ({encours:,} € – {round(encours / limite_credit_proposee * 100)} % de la limite)")
-                st.markdown("Client proche du plafond – anticiper les prochaines commandes.")
+                st.info(f"Encours élevé ({encours:,} € – {round(encours / limite_credit_proposee * 100)} % de la limite). "
+                        f"Risque net exposé : {risque_net:,} € après garantie. Anticiper les prochaines commandes.")
                 
             # =============================================
             # AFFICHAGE WAOU
@@ -614,5 +616,6 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
