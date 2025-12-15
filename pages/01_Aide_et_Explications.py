@@ -40,7 +40,7 @@ st.info("""
 7. Délai accordé + retard moyen → DSO réel
 8. Score externe (Ellisphere/Altares/Coface, Infolégale...)
 9. Région & Secteur
-10. CA TTC annuel réalisé N-1 ou prévisionnel N avec ce client (€) – **clé pour la limite de crédit proposée**
+10. Proposition de limite crédit
 """)
 
 # ===================================================================
