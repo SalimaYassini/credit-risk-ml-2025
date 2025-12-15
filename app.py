@@ -517,7 +517,7 @@ if page == "Simulation client":
                 }
                 try:
                     requests.post(
-                        "https://hook.eu1.make.com/jb1zlvmpnv6hlx28hea9eekol46ysdyj",
+                        "https://script.google.com/macros/s/AKfycbwxdfCDkWedPLN0Ffpy74TSVsRv3SoEtXvBdcAYlVtByc2zNh5er6BzZRxmofLQRCCawA/exec",
                         json=donnees_anonymes,
                         timeout=5
                     )
@@ -669,6 +669,7 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
