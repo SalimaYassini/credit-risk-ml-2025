@@ -405,7 +405,7 @@ if page == "Simulation client":
                 st.info(f"Encours élevé ({encours:,} € – {round(encours / limite_credit_proposee * 100)} % de la limite). "
                         f"Risque net exposé : {risque_net:,} € après garantie. Anticiper les prochaines commandes.")
 
-            # =============================================
+                       # =============================================
             # MÉTRIQUES
             # =============================================
             colm1, colm2, colm3 = st.columns(3)
@@ -653,6 +653,7 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
