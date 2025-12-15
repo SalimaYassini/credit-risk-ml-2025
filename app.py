@@ -365,7 +365,7 @@ if page == "Simulation client":
             # =============================================
             if ca_avec_client <= 0:
                 st.markdown(f"<h1 style='text-align: center; color: #C41E3A;'>LIMITE DE CRÉDIT PROPOSÉE → 0 €</h1>", unsafe_allow_html=True)
-                st.info("Renseignez le CA TTC avec ce client pour obtenir une proposition.")
+                st.info("Renseignez le CA TTC avec ce client pour obtenir une proposition de limite crédit.")
             elif situation_critique:
                 st.markdown(f"<h1 style='text-align: center; color: #C41E3A;'>LIMITE DE CRÉDIT PROPOSÉE → 0 € (SITUATION CRITIQUE)</h1>", unsafe_allow_html=True)
                 st.error("**Fondamentaux trop dégradés pour proposer une limite crédit viable.**")
@@ -650,6 +650,7 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
