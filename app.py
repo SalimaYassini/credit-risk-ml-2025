@@ -415,10 +415,10 @@ if page == "Simulation client":
                 delta = score_ajuste - prob
                 st.metric("Risque ajusté", f"{score_ajuste:.1%}", f"{delta:+.1%}", delta_color="inverse" if delta > 0 else "normal")
             with colm3:
-            if situation_critique or ca_avec_client <= 0:
-                st.metric("Limite crédit proposée", "0 €", help="Situation critique ou CA non saisi – voir message au-dessus")
-            else:
-                st.metric("Limite crédit proposée", f"{limite_formatee} €")
+                if situation_critique or ca_avec_client <= 0:
+                    st.metric("Limite crédit proposée", "0 €", help="Situation critique ou CA non saisi – voir message au-dessus")
+                else:
+                    st.metric("Limite crédit proposée", f"{limite_formatee} €")
                 
             # =========================================================
             # ALERTES ROUGES ET CONSEILS
@@ -653,6 +653,7 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
