@@ -320,12 +320,13 @@ if page == "Simulation client":
                 score_ajuste = max(score_ajuste, 0.58)
             if resultat < -1000000:
                 score_ajuste = max(score_ajuste, 0.60)
-
-            # =============================================
-            # LIMITE DE CRÉDIT – FORMULE RÉELLE (version pro)
+                
+                       # =============================================
+            # LIMITE DE CRÉDIT – FORMULE RÉELLE (version pro + gestion critique)
             # =============================================
             base_limite = (ca_avec_client * delai_accorde) / 365
-            # Ajustements terrain (sans bonus garantie auto)
+
+            # Ajustements terrain
             ajust_relances = -base_limite * 0.08 * max(0, nb_relances - 1)
             coef_type = {"Grand Compte":1.35, "ETI":1.20, "Administration publique":1.40, "PME":1.0, "International":0.90, "Startup":0.70}.get(type_client, 1.0)
             ajust_type = base_limite * (coef_type - 1)
@@ -334,19 +335,39 @@ if page == "Simulation client":
                 ajust_terrain -= base_limite * 0.30
             if client_strategique:
                 ajust_terrain += base_limite * 0.20
-            limite_credit_proposee = max(0, base_limite + ajust_relances + ajust_type + ajust_terrain)
-            limite_credit_proposee = round(limite_credit_proposee)
-            # Risque net exposé après garantie/assurance (en montant €)
-            risque_net = max(0, limite_credit_proposee - garantie_montant)
-            risque_net = round(risque_net)
+
+            limite_brute = max(0, base_limite + ajust_relances + ajust_type + ajust_terrain)
+            limite_brute = round(limite_brute)
+
+            # Détection situation critique (mêmes critères que tes alertes rouges)
+            situation_critique = (fonds_propres < 0 or autonomie < 20 or tresorerie < 0 or dso > 110)
+
+            if situation_critique:
+                limite_credit_proposee = 0
+                st.markdown(f"<h1 style='text-align: center; color: #C41E3A;'>LIMITE DE CRÉDIT PROPOSÉE → 0 € (SITUATION CRITIQUE)</h1>", unsafe_allow_html=True)
+                st.error("**Fondamentaux trop dégradés pour proposer une limite crédit viable.**")
+                st.markdown("""
+                **Actions prioritaires :**
+                - Exiger garanties personnelles ou caution bancaire
+                - Demander paiement comptant ou acompte 100 %
+                - Blocage livraisons jusqu'à régularisation
+                - Transmission contentieux si nécessaire
+                """)
+                risque_net = 0
+            else:
+                limite_credit_proposee = limite_brute
+                limite_formatee = f"{limite_credit_proposee:,}".replace(",", " ")
+                st.markdown(f"<h1 style='text-align: center; color: #2e8b57;'>LIMITE DE CRÉDIT PROPOSÉE → {limite_formatee} €</h1>", unsafe_allow_html=True)
+
+                # Risque net exposé après garantie/assurance
+                risque_net = max(0, limite_credit_proposee - garantie_montant)
+                risque_net = round(risque_net)
+                st.info(f"**Risque net exposé** (après couverture de {garantie_montant:,} €) : **{risque_net:,} €**".replace(",", " "))
 
             # =============================================
             # ALERTES INTELLIGENTES SUR DÉPASSEMENT (tenant compte de la garantie)
             # =============================================
-            risque_net = max(0, limite_credit_proposee - garantie_montant)
-
-            if encours > limite_credit_proposee:
-                # Dépassement brut existe
+            if encours > limite_credit_proposee and not situation_critique:
                 if risque_net == 0:
                     st.success(f"Encours en dépassement ({encours:,} € vs limite {limite_credit_proposee:,} €) "
                                f"mais **totalement couvert** par garantie/assurance ({garantie_montant:,} €). "
@@ -364,17 +385,13 @@ if page == "Simulation client":
                     - Relance + mise en demeure si retard important
                     - Blocage partiel ou total si risque non maîtrisé
                     """)
-            elif encours > limite_credit_proposee * 0.8:
+            elif encours > limite_credit_proposee * 0.8 and not situation_critique:
                 st.info(f"Encours élevé ({encours:,} € – {round(encours / limite_credit_proposee * 100)} % de la limite). "
                         f"Risque net exposé : {risque_net:,} € après garantie. Anticiper les prochaines commandes.")
-                
+
             # =============================================
-            # AFFICHAGE WAOU
+            # MÉTRIQUES
             # =============================================
-            st.markdown(f"<h1 style='text-align: center; color: #C41E3A;'>Risque de défaut 90 jours : {prob:.1%}</h1>", unsafe_allow_html=True)
-            limite_formatee = f"{limite_credit_proposee:,}".replace(",", " ")
-            st.markdown(f"<h1 style='text-align: center; color: #2e8b57;'>LIMITE DE CRÉDIT PROPOSÉE → {limite_formatee} €</h1>", unsafe_allow_html=True)
-            st.info(f"**Risque net exposé** (après couverture de {garantie_montant:,} €) : **{risque_net:,} €**".replace(",", " "))
             colm1, colm2, colm3 = st.columns(3)
             with colm1:
                 st.metric("Risque IA", f"{prob:.1%}")
@@ -382,7 +399,11 @@ if page == "Simulation client":
                 delta = score_ajuste - prob
                 st.metric("Risque ajusté", f"{score_ajuste:.1%}", f"{delta:+.1%}", delta_color="inverse" if delta > 0 else "normal")
             with colm3:
-                st.metric("Limite crédit proposée", f"{limite_formatee} €")
+                if situation_critique:
+                    st.metric("Limite crédit proposée", "0 € (critique)")
+                else:
+                    st.metric("Limite crédit proposée", f"{limite_formatee} €")
+                
             # =========================================================
             # ALERTES ROUGES ET CONSEILS
             # =========================================================
@@ -616,6 +637,7 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
