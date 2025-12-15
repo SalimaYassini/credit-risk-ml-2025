@@ -83,17 +83,17 @@ if page == "Simulation client":
     st.info("Saisissez les 10 paramètres clés – tout est dans le bilan ou liasse fiscale et balance âgée")
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown("### 1. Chiffre d'affaires 2024")
-        ca = st.number_input("Chiffre d'affaires HT 2024 (€)", 100000, 200000000, 2400000, step=50000,
+        st.markdown("### 1. Chiffre d'affaires N-1")
+        ca = st.number_input("Chiffre d'affaires HT N-1 (€)", 100000, 200000000, 2400000, step=50000,
                              help="Liasse ligne **FL** → Chiffre d'affaires net")
-        st.markdown("### 2. Résultat net 2024")
-        resultat = st.number_input("Résultat net (€)", -20000000, 50000000, 180000, step=10000,
+        st.markdown("### 2. Résultat net N-1")
+        resultat = st.number_input("Résultat net N-1 (€)", -20000000, 50000000, 180000, step=10000,
                                    help="Liasse ligne **HN** → Résultat de l'exercice")
-        st.markdown("### 3. Total bilan")
+        st.markdown("### 3. Total bilan N-1")
         total_bilan = st.number_input("Total actif = total passif (€)", 100000, 300000000, 3500000, step=50000,
                                        help="Liasse ligne **EE** ou dernière ligne du bilan")
-        st.markdown("### 4. Fonds propres")
-        fonds_propres = st.number_input("Capitaux propres (€)", min_value=-50000000, max_value=100000000, value=1200000, step=10000,
+        st.markdown("### 4. Fonds propres N-1")
+        fonds_propres = st.number_input("Capitaux propres N-1 (€)", min_value=-50000000, max_value=100000000, value=1200000, step=10000,
                                         help="Liasse ligne (DL +DO + DR) moins AA → peut être négatif en cas de pertes accumulées")
         # === AUTONOMIE FINANCIÈRE ===
         if total_bilan > 0:
@@ -115,7 +115,7 @@ if page == "Simulation client":
         else:
             autonomie = 0
             st.error("Total bilan = 0 → impossible de calculer l’autonomie financière")
-        st.markdown("### 5. Trésorerie nette")
+        st.markdown("### 5. Trésorerie nette N-1")
         tresorerie = st.number_input("Trésorerie nette (€)", min_value=-50000000, max_value=50000000, value=0, step=10000,
                                      help="Liasse lignes (CD + CF) moins (EH + YS). Négatif = alerte cash !")
         if tresorerie < 0:
@@ -123,7 +123,7 @@ if page == "Simulation client":
         elif tresorerie / total_bilan < 0.05:
             st.warning("Trésorerie très faible (<5 % du bilan) – surveiller de très près")
         # === ENDETTEMENT FINANCIER ===
-        st.markdown("### 6. Emprunts & dettes financières")
+        st.markdown("### 6. Emprunts & dettes financières N-1")
         dettes_mlt = st.number_input("Emprunts + dettes financières (€)", 0, 100000000, 800000, step=10000,
                                      help="Liasse lignes (DS + DT + DU + DV) moins EH → hors fournisseurs et concours bancaires")
         if fonds_propres != 0:
@@ -180,9 +180,9 @@ if page == "Simulation client":
         forme = st.selectbox("Forme juridique", ["SAS","SARL","SA","EURL","Auto-entrepreneur","Autre"], index=0, key="forme")
 
         # ==================================================================
-        # 10. Paramètres de paiement & ajustements terrain
+        # 10. Proposition de limite crédit
         # ==================================================================
-        st.markdown("### 10. Paramètres de paiement & ajustements terrain")
+        st.markdown("### 10. Proposition de limite crédit")
 
         c_ca, c_delai = st.columns(2)
         with c_ca:
@@ -669,6 +669,7 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
