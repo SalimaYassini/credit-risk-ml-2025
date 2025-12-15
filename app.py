@@ -554,8 +554,11 @@ if page == "Simulation client":
             "Date": datetime.now().strftime("%d/%m %H:%M"),
             "Client": st.session_state.current_client or "Anonyme",
             "SIREN": st.session_state.current_siren or "-",
-            "CA TTC avec client": f"{ca_avec_client:,} €",
-            "CA global HT": f"{ca:,} €",
+            "Type client": type_client,
+            "Région": region,
+            "Secteur": secteur,
+            "Score externe": score,
+            "Chiffre d'affaires N-1 (Liasse)": f"{ca:,} €",
             "Résultat net": f"{resultat:,} €",
             "Fonds propres": f"{fonds_propres:,} €",
             "Autonomie": f"{autonomie:.1f}%" if total_bilan > 0 else "NC",
@@ -570,15 +573,12 @@ if page == "Simulation client":
             "Client stratégique": "Oui" if client_strategique else "Non",
             "Commentaire": commentaire or "Aucun",
             "Nb relances": nb_relances,
+            "CA TTC annuel réalisé N-1 ou prévisionnel N avec le client": f"{ca_avec_client:,} €",
             "Encours actuel": f"{encours:,} €",
-            "Limite crédit actuelle": f"{limite_credit_actuelle:,} €",
-            "Limite crédit proposée": f"{limite_credit_proposee:,} €",
             "Risque net exposé": f"{risque_net:,} €",
             "Garantie montant": f"{garantie_montant:,} €",
-            "Type client": type_client,
-            "Région": region,
-            "Secteur": secteur,
-            "Score externe": score
+            "Limite crédit actuelle": f"{limite_credit_actuelle:,} €",
+            "Limite crédit proposée": f"{limite_credit_proposee:,} €",
         }
         st.session_state.historique.append(nouvelle_ligne)
         st.session_state.save_now = False
@@ -669,6 +669,7 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
