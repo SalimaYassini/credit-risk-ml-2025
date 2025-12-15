@@ -81,6 +81,25 @@ page = st.sidebar.radio("Navigation", ["Simulation client", "Carte de France", "
 if page == "Simulation client":
     st.markdown("## Scoring prédictif de défaut 90 jours avant")
     st.info("Saisissez les 10 paramètres clés – tout est dans le bilan ou liasse fiscale et balance âgée")
+        # ===================================================================
+    # COMPTEUR DE SIMULATIONS (social proof)
+    # ===================================================================
+    if "compteur_simulations" not in st.session_state:
+        st.session_state.compteur_simulations = 0
+
+    # Incrémenter le compteur uniquement après une prédiction réussie
+    if st.session_state.get("save_now", False):
+        st.session_state.compteur_simulations += 1
+        st.session_state.save_now = False  # reset pour éviter double comptage
+
+    # Affichage du compteur en gros et visible
+    st.markdown(
+        f"<h2 style='text-align: center; color: #2e8b57;'>"
+        f"🔥 Déjà <strong>{st.session_state.compteur_simulations:,}</strong> simulations réalisées par la communauté"
+        f"</h2>",
+        unsafe_allow_html=True
+    )
+    st.caption("Chaque simulation anonyme enrichit l’outil pour tous – merci pour votre contribution !")
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("### 1. Chiffre d'affaires N-1")
@@ -669,6 +688,7 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
