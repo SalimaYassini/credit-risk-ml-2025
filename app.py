@@ -575,10 +575,10 @@ if page == "Simulation client":
             "Nb relances": nb_relances,
             "CA TTC annuel réalisé N-1 ou prévisionnel N avec le client": f"{ca_avec_client:,} €",
             "Encours actuel": f"{encours:,} €",
-            "Risque net exposé": f"{risque_net:,} €",
-            "Garantie montant": f"{garantie_montant:,} €",
             "Limite crédit actuelle": f"{limite_credit_actuelle:,} €",
             "Limite crédit proposée": f"{limite_credit_proposee:,} €",
+            "Garantie montant": f"{garantie_montant:,} €",
+            "Risque net exposé": f"{risque_net:,} €"
         }
         st.session_state.historique.append(nouvelle_ligne)
         st.session_state.save_now = False
@@ -669,6 +669,7 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
