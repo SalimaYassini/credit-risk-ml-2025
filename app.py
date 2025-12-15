@@ -490,29 +490,39 @@ if page == "Simulation client":
             # =========================================================
             if contribuer:
                 donnees_anonymes = {
-                    "ca_ttc_prev": ca,
-                    "delai_accorde_jours": delai_accorde,
-                    "encours": encours,
-                    "limite_credit_actuelle": limite_credit_actuelle,
-                    "garantie_montant": garantie_montant,
-                    "nb_relances": nb_relances,
-                    "type_client": type_client,
-                    "resultat_net": resultat,
-                    "total_bilan": total_bilan,
-                    "fonds_propres": fonds_propres,
-                    "tresorerie_nette": tresorerie,
-                    "autonomie_financiere": autonomie,
-                    "endettement": endettement,
-                    "region": region,
-                    "secteur": secteur,
-                    "score_externe": score,
-                    "risque_ia": round(float(prob),6),
-                    "risque_ajuste": round(float(score_ajuste),6),
-                    "limite_credit_proposee": limite_credit_proposee,
-                    "litige": int(litige),
-                    "client_strategique": int(client_strategique),
-                    "motif_retard": motif_retard,
-                    "commentaire": commentaire or "",
+                    "Date": datetime.now().strftime("%d/%m %H:%M"),
+                    "Client": st.session_state.current_client or "Anonyme",
+                    "SIREN": st.session_state.current_siren or "-",
+                    "Type client": type_client,
+                    "Région": region,
+                    "Secteur": secteur,
+                    "Forme juridique": forme,
+                    "Score externe": score,
+                    "Chiffre d'affaires N-1 (Liasse)": ca,
+                    "Résultat net": resultat,
+                    "Total bilan": total_bilan,
+                    "Fonds propres": fonds_propres,
+                    "Autonomie (%)": round(autonomie, 1) if total_bilan > 0 else None,
+                    "Trésorerie nette": tresorerie,
+                    "Emprunts & dettes financières": dettes_mlt,
+                    "Endettement (%)": round(endettement, 1) if fonds_propres != 0 else None,
+                    "Délai accordé sur facture (jours)": delai_accorde,
+                    "Retard moyen observé (jours)": retard_moyen,
+                    "DSO": dso,
+                    "Justification (motif retard)": motif_retard,
+                    "Litige": "Oui" if litige else "Non",
+                    "Client stratégique": "Oui" if client_strategique else "Non",
+                    "Commentaire": commentaire or "Aucun",
+                    "Nb relances": nb_relances,
+                    "CA TTC annuel réalisé N-1 ou prévisionnel N avec le client": ca_avec_client,
+                    "Encours actuel": encours,
+                    "Limite crédit actuelle": limite_credit_actuelle,
+                    "Garantie montant": garantie_montant,
+                    "Risque IA": round(float(prob), 6),
+                    "Risque ajusté": round(float(score_ajuste), 6),
+                    "Limite crédit proposée": round(limite_credit_proposee),
+                    "Risque net exposé": round(risque_net),
+                    "Situation critique": "Oui" if situation_critique else "Non",
                     "timestamp": datetime.now().isoformat()
                 }
                 try:
@@ -669,6 +679,7 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
