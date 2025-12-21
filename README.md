@@ -8,7 +8,7 @@ Lien direct →
 
 ### Ce que fait l’outil (déjà en ligne, décembre 2025)
 
-- Analyse 10 paramètres clés du bilan + DSO réel + **trésorerie nette**  
+- Analyse 10 paramètres clés + DSO réel + **trésorerie nette**  
 - Score de risque clair (vert / jaune / orange / rouge)  
 - Ajustement automatique avec l’expertise terrain :  
   → litige en cours, délai contractuel 90j, client stratégique  
