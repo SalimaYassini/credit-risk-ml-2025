@@ -4,11 +4,11 @@
 **IA + 15 ans d’expertise terrain intégrée**
 
 Lien direct →  
-https://salima-credit-risk-2025.streamlit.app
+(https://credit-risk-ml-2025.onrender.com/)
 
 ### Ce que fait l’outil (déjà en ligne, décembre 2025)
 
-- Analyse 9 chiffres clés du bilan + DSO réel + **trésorerie nette**  
+- Analyse 10 paramètres clés du bilan + DSO réel + **trésorerie nette**  
 - Score de risque clair (vert / jaune / orange / rouge)  
 - Ajustement automatique avec l’expertise terrain :  
   → litige en cours, délai contractuel 90j, client stratégique  
@@ -20,8 +20,8 @@ https://salima-credit-risk-2025.streamlit.app
 ### Performance réelle (décembre 2025)
 
 - **AUC = 0,9418**  
-- Détecte 83 % des défaillances 90 jours à l’avance  
-- Testé sur plus de 100 000 entreprises françaises réelles
+- Détecte 94 % des défaillances 90 jours à l’avance  
+- Testé sur plus de 100 000 entreprises françaises réelles (anonymes + RGPD)
 
 ### Pour qui ?
 
