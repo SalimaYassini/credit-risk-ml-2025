@@ -81,7 +81,8 @@ page = st.sidebar.radio("Navigation", ["Simulation client", "Carte de France", "
 if page == "Simulation client":
     st.markdown("## Scoring prédictif de défaut 90 jours avant")
     st.info("Saisissez les 10 paramètres clés – tout est dans le bilan ou liasse fiscale et balance âgée")
-            # ===================================================================
+
+    # ===================================================================
     # COMPTEUR DE SIMULATIONS (social proof)
     # ===================================================================
     if "compteur_simulations" not in st.session_state:
@@ -94,6 +95,7 @@ if page == "Simulation client":
         unsafe_allow_html=True
     )
     st.caption("Chaque simulation anonyme enrichit l’outil pour tous – merci pour votre contribution !")
+
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("### 1. Chiffre d'affaires N-1")
@@ -177,7 +179,7 @@ if page == "Simulation client":
             "Oui, j’autorise l’envoi anonyme de cette simulation pour améliorer le modèle national",
             value=True
         )
-with col2:
+    with col2:
         st.markdown("### 8. Score externe")
         score = st.slider("Note Ellisphere / Altares / Coface (1=pire, 10=excellent)", 1.0, 10.0, 4.8, 0.1, key="score_externe")
         st.markdown("### 9. Région & Secteur")
@@ -236,8 +238,7 @@ with col2:
 
         # === BOUTON PRÉDICTION ===
         if st.button("PRÉDIRE LE RISQUE DE DÉFAUT 90 JOURS", type="primary", use_container_width=True):
-        
-        # === DATAFRAME POUR LE MODÈLE ===
+            # === DATAFRAME POUR LE MODÈLE ===
             data = pd.DataFrame([{
                 "age_annees": 12,
                 "effectif": max(5, ca // 150000),
@@ -278,7 +279,7 @@ with col2:
 
             # === PRÉDICTION ===
             prob = (xgb.predict_proba(data)[0,1] + lgb.predict_proba(data)[0,1] + cat.predict_proba(data)[0,1]) / 3
-            
+
             # ===========================================================
             # AJUSTEMENT TERRAIN EXPERT SALIMA YASSINI – VERSION FINALE 100 % SÉCURISÉE 2025
             # ============================================================
@@ -334,8 +335,8 @@ with col2:
                 score_ajuste = max(score_ajuste, 0.58)
             if resultat < -1000000:
                 score_ajuste = max(score_ajuste, 0.60)
-                
-                       # =============================================
+
+            # =============================================
             # LIMITE DE CRÉDIT – FORMULE RÉELLE (version pro + gestion critique + CA = 0)
             # =============================================
             # Alerte si CA TTC avec le client est à 0
@@ -419,7 +420,7 @@ with col2:
                 st.info(f"Encours élevé ({encours:,} € – {round(encours / limite_credit_proposee * 100)} % de la limite). "
                         f"Risque net exposé : {risque_net:,} € après garantie. Anticiper les prochaines commandes.")
 
-                       # =============================================
+            # =============================================
             # MÉTRIQUES
             # =============================================
             colm1, colm2, colm3 = st.columns(3)
@@ -433,7 +434,7 @@ with col2:
                     st.metric("Limite crédit proposée", "0 €", help="Situation critique ou CA non saisi – voir message au-dessus")
                 else:
                     st.metric("Limite crédit proposée", f"{limite_formatee} €")
-                
+
             # =========================================================
             # ALERTES ROUGES ET CONSEILS
             # =========================================================
@@ -499,6 +500,7 @@ with col2:
                 conseils.append("Score externe très faible → assurance-crédit obligatoire")
             for conseil in conseils:
                 st.markdown(f"• {conseil}")
+
             # =========================================================
             # CONTRIBUTION ANONYME
             # =========================================================
@@ -565,10 +567,10 @@ with col2:
 
     # ===================================================================
     # HISTORIQUE PAR CLIENT
-    # ==================================================================
-st.markdown("### Historique par client & Export Excel")
-        if st.session_state.get("save_now", False):
-            niveau = "FAIBLE"
+    # ===================================================================
+    st.markdown("### Historique par client & Export Excel")
+    if st.session_state.get("save_now", False):
+        niveau = "FAIBLE"
         if st.session_state.last_score_ajuste >= 0.40:
             niveau = "TRÈS ÉLEVÉ"
         elif st.session_state.last_score_ajuste >= 0.20:
@@ -694,16 +696,6 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
-
-
-
-
-
-
-
-
-
-
 
 
 
