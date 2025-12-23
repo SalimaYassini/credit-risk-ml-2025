@@ -608,7 +608,7 @@ st.markdown("### Historique par client & Export Excel")
         st.session_state.historique.append(nouvelle_ligne)
         st.session_state.save_now = False
         st.success("Simulation sauvegardée !")
-    if st.session_state.historique:
+        if st.session_state.historique:
         df = pd.DataFrame(st.session_state.historique)
         clients = ["Tous les clients"] + sorted([c for c in df["Client"].unique() if c != "Anonyme"])
         if "Anonyme" in df["Client"].values:
@@ -694,6 +694,7 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
