@@ -565,8 +565,8 @@ with col2:
 
     # ===================================================================
     # HISTORIQUE PAR CLIENT
-    # ===================================================================
-    st.markdown("### Historique par client & Export Excel")
+    # ==================================================================
+st.markdown("### Historique par client & Export Excel")
         if st.session_state.get("save_now", False):
             niveau = "FAIBLE"
         if st.session_state.last_score_ajuste >= 0.40:
@@ -694,6 +694,7 @@ st.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("**© Salima Yassini 2025 – Tous droits réservés**")
 st.sidebar.markdown("**safia142001@yahoo.fr • 07 78 24 78 49**")
+
 
 
 
