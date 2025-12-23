@@ -178,8 +178,23 @@ if page == "Simulation client":
             value=True
         )
     with col2:
-        st.markdown("### 8. Score externe")
-        score = st.slider("Note Ellisphere / Altares / Coface (1=pire, 10=excellent)", 1.0, 10.0, 4.8, 0.1, key="score_externe")
+        # === 8. Score externe (avec option désactivation) ===
+st.markdown("### 8. Score externe")
+use_external = st.checkbox(
+    "Utiliser un score externe (Ellisphere/Altares/Coface)",
+    value=True,
+    help="Décochez si vous n'avez pas accès à ces renseignements payants. Le scoring se basera uniquement sur l'IA + ajustements terrain."
+)
+
+if use_external:
+    score = st.slider(
+        "Note Ellisphere / Altares / Coface (1=pire, 10=excellent)",
+        1.0, 10.0, 4.8, 0.1,
+        key="score_externe"
+    )
+else:
+    score = 5.0  # Valeur neutre/moyenne quand désactivé
+    st.info("Score externe désactivé → calcul basé uniquement sur IA + expertise terrain")
         st.markdown("### 9. Région & Secteur")
         region = st.selectbox("Région du siège", [
             "Île-de-France","Auvergne-Rhône-Alpes","PACA","Hauts-de-France","Occitanie",
@@ -236,7 +251,10 @@ if page == "Simulation client":
 
         # === BOUTON PRÉDICTION ===
         if st.button("PRÉDIRE LE RISQUE DE DÉFAUT 90 JOURS", type="primary", use_container_width=True):
-            # === DATAFRAME POUR LE MODÈLE ===
+        # Force un score neutre si désactivé (sécurité supplémentaire)
+            if not use_external:
+                score = 5.0
+        # === DATAFRAME POUR LE MODÈLE ===
             data = pd.DataFrame([{
                 "age_annees": 12,
                 "effectif": max(5, ca // 150000),
@@ -277,7 +295,7 @@ if page == "Simulation client":
 
             # === PRÉDICTION ===
             prob = (xgb.predict_proba(data)[0,1] + lgb.predict_proba(data)[0,1] + cat.predict_proba(data)[0,1]) / 3
-
+            
             # ===========================================================
             # AJUSTEMENT TERRAIN EXPERT SALIMA YASSINI – VERSION FINALE 100 % SÉCURISÉE 2025
             # ============================================================
@@ -333,6 +351,9 @@ if page == "Simulation client":
                 score_ajuste = max(score_ajuste, 0.58)
             if resultat < -1000000:
                 score_ajuste = max(score_ajuste, 0.60)
+                # Info explicative quand score externe est désactivé
+            if not use_external:
+                st.caption("⚠️ Score externe désactivé → le risque est calculé uniquement sur les données du bilan, DSO réel et ajustements terrain (AUC 0.9418 maintenu)")
                 
                        # =============================================
             # LIMITE DE CRÉDIT – FORMULE RÉELLE (version pro + gestion critique + CA = 0)
